@@ -77,6 +77,13 @@ def ai_post_generator():
 def profile():
     return render_template('profile.html')
 
+@app.route('/card/<int:index>')
+def card_detail(index):
+    cards = read_cards()
+    if 0 <= index < len(cards):
+        return render_template('card_detail.html', card=cards[index])
+    else:
+        return "Card not found", 404
 
 
 @app.route('/create-card', methods=['GET', 'POST'])
