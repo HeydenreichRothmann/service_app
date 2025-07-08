@@ -2,7 +2,19 @@ from flask import Flask, render_template, request, redirect, url_for
 import csv
 from datetime import datetime
 
+import os
+from werkzeug.utils import secure_filename
+
+
 app = Flask(__name__)
+
+
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
+
 
 def read_cards():
     cards = []
@@ -65,21 +77,31 @@ def ai_post_generator():
 def profile():
     return render_template('profile.html')
 
+
+
 @app.route('/create-card', methods=['GET', 'POST'])
 def create_card():
     if request.method == 'POST':
         name = request.form['cardName']
         description = request.form['cardDescription']
-        image = request.files['cardImage'].filename if 'cardImage' in request.files else ''
+        image_file = request.files.get('cardImage')
         location = request.form['cardLocation']
         user = request.form['cardUser']
         contact_details = request.form['cardContact']
         date_logged = datetime.now().strftime('%Y-%m-%d %H:%M')
 
+        # Save image if provided
+        image_filename = ''
+        if image_file and image_file.filename != '':
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(image_path)
+            image_filename = image_path  # Save relative path in CSV
+
         new_card = {
             'name': name,
             'description': description,
-            'image': image,
+            'image': image_filename,
             'location': location,
             'date_logged': date_logged,
             'user': user,

@@ -1,69 +1,73 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
+
 {% block content %}
   <div class="content">
-    <button onclick="window.location.href='/create-card'" style="padding: 12px 24px; background-color: #20c997; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-bottom: 20px;">Create Hustle Card</button>
-    <div class="grid-container">
+    <button onclick="window.location.href='/create-card'" class="action-btn">Create Hustle Card</button>
+
+    <div class="card-grid">
       {% for card in cards %}
-        <div class="card">
-          <div class="card-title">{{ card.name }}</div>
-          <div class="card-description">{{ card.description }}</div>
-          <div class="card-location">Location: {{ card.location }}</div>
-          <div class="card-date">Logged: {{ card.date_logged }}</div>
-          <div class="card-contact">Contact: {{ card.contact_details }}</div>
+        <div class="card-item">
           {% if card.image %}
-            <img src="{{ url_for('static', filename=card.image) }}" alt="{{ card.name }}" style="max-width: 100%; border-radius: 8px; margin-top: 10px;">
+            <img src="{{ '/' + card.image }}" alt="{{ card.name }}" class="card-thumbnail">
           {% endif %}
+          <h3>{{ card.name }}</h3>
         </div>
       {% endfor %}
     </div>
-
-    <style>
-      .grid-container {
-        max-width: 1000px;
-        margin: 40px auto;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        padding: 0 20px;
-      }
-
-      .card {
-        background-color: #fff;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        text-align: center;
-        transition: transform 0.2s ease;
-      }
-
-      .card:hover {
-        transform: translateY(-5px);
-      }
-
-      .card-title {
-        font-weight: bold;
-        font-size: 1.1rem;
-        margin-bottom: 8px;
-      }
-
-      .card-description {
-        font-size: 0.95rem;
-        color: #555;
-        margin-bottom: 8px;
-      }
-
-      .card-location, .card-date, .card-contact {
-        font-size: 0.85rem;
-        color: #666;
-        margin-bottom: 5px;
-      }
-
-      img {
-        max-width: 100%;
-        border-radius: 8px;
-        margin-top: 10px;
-      }
-    </style>
   </div>
+
+  <style>
+    .action-btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(90deg, #20c997, #27ae60);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(32, 201, 151, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(32, 201, 151, 0.4);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card-item {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-thumbnail {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-item h3 {
+      font-size: 1.1rem;
+      color: #2c3e50;
+      margin: 0;
+    }
+  </style>
 {% endblock %}

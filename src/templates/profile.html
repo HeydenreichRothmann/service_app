@@ -3,6 +3,28 @@
 {% block content %}
   <div class="content">
     <h1>Profile</h1>
-    <p>View and edit your personal profile details here.</p>
+    <div class="profile-card">
+      <h3>Personal Details</h3>
+      <p>Edit your name, email, and more here.</p>
+    </div>
   </div>
+  <style>
+    .profile-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+
+    .profile-card h3 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-card p {
+      color: #7f8c8d;
+    }
+  </style>
 {% endblock %}

@@ -3,6 +3,28 @@
 {% block content %}
   <div class="content">
     <h1>Account</h1>
-    <p>Manage your account settings and preferences here.</p>
+    <div class="account-card">
+      <h3>Settings</h3>
+      <p>Manage your account preferences and security here.</p>
+    </div>
   </div>
+  <style>
+    .account-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 2rem auto;
+    }
+
+    .account-card h3 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .account-card p {
+      color: #7f8c8d;
+    }
+  </style>
 {% endblock %}

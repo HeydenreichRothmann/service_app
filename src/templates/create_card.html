@@ -1,34 +1,139 @@
 {% extends "base.html" %}
 {% block title %}Create Hustle Card{% endblock %}
+
 {% block content %}
-  <div class="content">
-    <h1>Create Hustle Card</h1>
-    <form action="/create-card" method="POST" style="max-width: 500px; margin: 20px auto; text-align: left;" enctype="multipart/form-data">
-      <div style="margin-bottom: 15px;">
-        <label for="cardName" style="display: block; margin-bottom: 5px;">Card Name:</label>
-        <input type="text" id="cardName" name="cardName" placeholder="e.g., Hair Braiding" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="cardDescription" style="display: block; margin-bottom: 5px;">Description:</label>
-        <textarea id="cardDescription" name="cardDescription" placeholder="e.g., Get your style done by pros near you." style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; height: 100px;" required></textarea>
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="cardImage" style="display: block; margin-bottom: 5px;">Image:</label>
-        <input type="file" id="cardImage" name="cardImage" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="cardLocation" style="display: block; margin-bottom: 5px;">Location:</label>
-        <input type="text" id="cardLocation" name="cardLocation" placeholder="e.g., New York, NY" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="cardUser" style="display: block; margin-bottom: 5px;">User:</label>
-        <input type="text" id="cardUser" name="cardUser" placeholder="e.g., user1" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
-      </div>
-      <div style="margin-bottom: 15px;">
-        <label for="cardContact" style="display: block; margin-bottom: 5px;">Contact Details:</label>
-        <input type="text" id="cardContact" name="cardContact" placeholder="e.g., phone:123-456-7890" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" required>
-      </div>
-      <button type="submit" style="padding: 10px 20px; background-color: #20c997; color: #fff; border: none; border-radius: 8px; cursor: pointer;">Save Card</button>
-    </form>
-  </div>
+<div class="card-creator">
+  <h1 class="page-title">🚀 Create Your Hustle Card</h1>
+  
+  <form action="/create-card" method="POST" enctype="multipart/form-data" class="card-form">
+
+    <!-- Image Preview Box -->
+    <div class="image-upload-container">
+      <label for="cardImage" class="image-label">📸 Upload Your Image</label>
+      <input type="file" id="cardImage" name="cardImage" accept="image/*" onchange="previewImage(event)">
+      <div class="image-preview" id="imagePreview">No image selected</div>
+    </div>
+
+    <!-- Card Name -->
+    <input type="text" id="cardName" name="cardName" placeholder="What’s your hustle? (e.g., Hair Braiding)" required>
+
+    <!-- Description -->
+    <textarea id="cardDescription" name="cardDescription" placeholder="Describe your hustle..." required></textarea>
+
+    <!-- Location, User, Contact -->
+    <input type="text" id="cardLocation" name="cardLocation" placeholder="📍 Where are you based?" required>
+    <input type="text" id="cardUser" name="cardUser" placeholder="👤 Your username or business name" required>
+    <input type="text" id="cardContact" name="cardContact" placeholder="📞 Contact details (e.g., 123-456-7890)" required>
+
+    <button type="submit" class="save-btn">✨ Save Card</button>
+  </form>
+</div>
+
+<style>
+  .card-creator {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .page-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #222;
+  }
+
+  .card-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .card-form input,
+  .card-form textarea {
+    padding: 0.9rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border 0.3s;
+  }
+
+  .card-form input:focus,
+  .card-form textarea:focus {
+    border-color: #20c997;
+    outline: none;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .save-btn {
+    background-color: #20c997;
+    color: white;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .save-btn:hover {
+    background-color: #17a78a;
+  }
+
+  .image-upload-container {
+    text-align: center;
+  }
+
+  .image-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #444;
+  }
+
+  #cardImage {
+    display: block;
+    margin: 0 auto 1rem;
+  }
+
+  .image-preview {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    color: #888;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+
+  .image-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+  }
+</style>
+
+<script>
+  function previewImage(event) {
+    const preview = document.getElementById('imagePreview');
+    const file = event.target.files[0];
+
+    if (file) {
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      preview.innerHTML = '';
+      preview.appendChild(img);
+    } else {
+      preview.textContent = 'No image selected';
+    }
+  }
+</script>
 {% endblock %}

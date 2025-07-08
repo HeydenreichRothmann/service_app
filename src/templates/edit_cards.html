@@ -4,40 +4,126 @@
   <div class="content">
     <h1>Edit Cards</h1>
     {% if cards %}
-      {% for card in cards %}
-        <div class="card" style="margin-bottom: 20px; text-align: left; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-          <form method="POST" style="display: flex; flex-wrap: wrap; gap: 10px;">
-            <input type="hidden" name="edit_index" value="{{ loop.index0 }}">
-            <div style="flex: 1; min-width: 200px;">
-              <label>Name:</label>
-              <input type="text" name="edit_name_{{ loop.index0 }}" value="{{ card.name }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="flex: 1; min-width: 200px;">
-              <label>Description:</label>
-              <textarea name="edit_description_{{ loop.index0 }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; height: 60px;">{{ card.description }}</textarea>
-            </div>
-            <div style="flex: 1; min-width: 200px;">
-              <label>Location:</label>
-              <input type="text" name="edit_location_{{ loop.index0 }}" value="{{ card.location }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="flex: 1; min-width: 200px;">
-              <label>User:</label>
-              <input type="text" name="edit_user_{{ loop.index0 }}" value="{{ card.user }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <div style="flex: 1; min-width: 200px;">
-              <label>Contact:</label>
-              <input type="text" name="edit_contact_{{ loop.index0 }}" value="{{ card.contact_details }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
-            </div>
-            <button type="submit" style="padding: 8px 16px; background-color: #20c997; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">Save Changes</button>
-            <form method="POST" style="margin-top: 10px;">
-              <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
-              <button type="submit" style="padding: 8px 16px; background-color: #dc3545; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Remove Card</button>
+      <div class="card-grid">
+        {% for card in cards %}
+          <div class="card-item">
+            <form method="POST" class="edit-form">
+              <input type="hidden" name="edit_index" value="{{ loop.index0 }}">
+              <div class="form-group">
+                <label>Name:</label>
+                <input type="text" name="edit_name_{{ loop.index0 }}" value="{{ card.name }}" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Description:</label>
+                <textarea name="edit_description_{{ loop.index0 }}" class="form-input">{{ card.description }}</textarea>
+              </div>
+              <div class="form-group">
+                <label>Location:</label>
+                <input type="text" name="edit_location_{{ loop.index0 }}" value="{{ card.location }}" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>User:</label>
+                <input type="text" name="edit_user_{{ loop.index0 }}" value="{{ card.user }}" class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Contact:</label>
+                <input type="text" name="edit_contact_{{ loop.index0 }}" value="{{ card.contact_details }}" class="form-input">
+              </div>
+              <button type="submit" class="action-btn save-btn">Save Changes</button>
             </form>
-          </form>
-        </div>
-      {% endfor %}
+            <form method="POST" class="remove-form">
+              <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
+              <button type="submit" class="action-btn remove-btn">Remove Card</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
-      <p>No cards to edit.</p>
+      <p class="no-cards">No cards to edit.</p>
     {% endif %}
   </div>
+  <style>
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card-item {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .edit-form, .remove-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+      color: #2c3e50;
+      margin-bottom: 0.25rem;
+    }
+
+    .form-input {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+      border-color: #20c997;
+      outline: none;
+    }
+
+    .action-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .save-btn {
+      background: linear-gradient(90deg, #20c997, #27ae60);
+      color: #fff;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(90deg, #1d9b7e, #219653);
+      transform: translateY(-2px);
+    }
+
+    .remove-btn {
+      background: linear-gradient(90deg, #e74c3c, #c0392b);
+      color: #fff;
+    }
+
+    .remove-btn:hover {
+      background: linear-gradient(90deg, #d32f2f, #a93226);
+      transform: translateY(-2px);
+    }
+
+    .no-cards {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+  </style>
 {% endblock %}
