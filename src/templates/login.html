@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+  <div class="content">
+    <h1>Login</h1>
+    <form method="POST" class="card-form">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" class="form-input" required>
+      </div>
+      <button type="submit" class="action-btn save-btn">Login</button>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+  <style>
+    .card-form { max-width: 400px; margin: 2rem auto; display: flex; flex-direction: column; gap: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-size: 0.9rem; color: #2c3e50; margin-bottom: 0.25rem; }
+    .form-input { padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; transition: border-color 0.3s ease; }
+    .form-input:focus { border-color: #20c997; outline: none; }
+    .action-btn { padding: 0.75rem 1.5rem; border: none; border-radius: 25px; font-size: 1rem; cursor: pointer; transition: transform 0.2s ease, background 0.3s ease; }
+    .save-btn { background: linear-gradient(90deg, #20c997, #27ae60); color: #fff; }
+    .save-btn:hover { background: linear-gradient(90deg, #1d9b7e, #219653); transform: translateY(-2px); }
+  </style>
+{% endblock %}

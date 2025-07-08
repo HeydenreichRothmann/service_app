@@ -2,29 +2,123 @@
 {% block title %}Account{% endblock %}
 {% block content %}
   <div class="content">
-    <h1>Account</h1>
     <div class="account-card">
-      <h3>Settings</h3>
-      <p>Manage your account preferences and security here.</p>
+      <h1 class="account-title">Account</h1>
+      <div class="settings-section">
+        <h2>Settings</h2>
+        <form method="POST" class="settings-form">
+          <div class="form-group">
+            <label for="user_name">Name:</label>
+            <input type="text" id="user_name" name="user_name" value="{{ user_info.name }}" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="user_email">Email:</label>
+            <input type="email" id="user_email" name="user_email" value="{{ user_info.email }}" class="form-input" required>
+          </div>
+          <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+      </div>
     </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
   </div>
   <style>
     .account-card {
-      background: #fff;
-      border-radius: 15px;
-      padding: 1.5rem;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
       max-width: 500px;
       margin: 2rem auto;
+      background: linear-gradient(135deg, #ffffff, #f5f7fa);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      font-family: 'Poppins', sans-serif;
     }
 
-    .account-card h3 {
+    .account-title {
+      font-size: 2rem;
       color: #2c3e50;
-      margin-bottom: 0.5rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, #3498db, #20c997);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
-    .account-card p {
+    .settings-section h2 {
+      font-size: 1.5rem;
+      color: #34495e;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #20c997;
+      padding-bottom: 0.5rem;
+    }
+
+    .settings-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 0.95rem;
       color: #7f8c8d;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-input {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input:focus {
+      border-color: #20c997;
+      outline: none;
+    }
+
+    .save-btn {
+      padding: 0.9rem 1.5rem;
+      background: linear-gradient(90deg, #20c997, #27ae60);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(32, 201, 151, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(32, 201, 151, 0.4);
+    }
+
+    .flash-message {
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .flash-success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .flash-error {
+      background: #f8d7da;
+      color: #721c24;
     }
   </style>
 {% endblock %}

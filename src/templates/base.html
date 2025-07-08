@@ -6,199 +6,45 @@
   <title>Hustle Hub - {% block title %}{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #f0f4f8, #e0e7f0);
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .navbar {
-      background: linear-gradient(90deg, #2c3e50, #3498db);
-      padding: 1rem 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-title a {
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 600;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .nav-title a:hover {
-      color: #20c997;
-    }
-
-    .nav-icons i {
-      color: #fff;
-      font-size: 1.5rem;
-      margin-left: 1rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .nav-icons i:hover {
-      color: #20c997;
-    }
-
-    .sidebar {
-      width: 250px;
-      background: #2c3e50;
-      position: fixed;
-      top: 0;
-      left: -250px;
-      height: 100%;
-      padding: 2rem 1rem;
-      transition: left 0.3s ease;
-      z-index: 1000;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .sidebar.open {
-      left: 0;
-    }
-
-    .sidebar a {
-      display: block;
-      color: #fff;
-      text-decoration: none;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    .sidebar a:hover {
-      background: #20c997;
-      color: #fff;
-    }
-
-    .sidebar .bottom-links a {
-      background: #34495e;
-      font-weight: 500;
-    }
-
-    .sidebar .bottom-links a:hover {
-      background: #20c997;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      font-size: 1.5rem;
-      color: #fff;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .close-btn:hover {
-      color: #20c997;
-    }
-
-    .content {
-      max-width: 1200px;
-      margin: 6rem auto 2rem;
-      padding: 0 1rem;
-      min-height: calc(100vh - 8rem);
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 1.5rem;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { transform: translateY(-50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .modal-content h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #2c3e50;
-    }
-
-    .modal-content input {
-      width: 100%;
-      padding: 0.75rem;
-      margin: 0.5rem 0;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    .modal-content button {
-      padding: 0.75rem 1.5rem;
-      margin: 0.5rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s ease;
-    }
-
-    .modal-content .save-btn {
-      background: #20c997;
-      color: #fff;
-    }
-
-    .modal-content .save-btn:hover {
-      background: #1d9b7e;
-    }
-
-    .modal-content .cancel-btn {
-      background: #7f8c8d;
-      color: #fff;
-    }
-
-    .modal-content .cancel-btn:hover {
-      background: #6b757c;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f0f4f8, #e0e7f0); color: #333; line-height: 1.6; }
+    .navbar { background: linear-gradient(90deg, #2c3e50, #3498db); padding: 1rem 2rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+    .nav-title a { color: #fff; font-size: 1.5rem; font-weight: 600; text-decoration: none; transition: color 0.3s ease; }
+    .nav-title a:hover { color: #20c997; }
+    .nav-icons i { color: #fff; font-size: 1.5rem; margin-left: 1rem; cursor: pointer; transition: color 0.3s ease; }
+    .nav-icons i:hover { color: #20c997; }
+    .sidebar { width: 250px; background: #2c3e50; position: fixed; top: 0; left: -250px; height: 100%; padding: 2rem 1rem; transition: left 0.3s ease; z-index: 1000; box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); }
+    .sidebar.open { left: 0; }
+    .sidebar a { display: block; color: #fff; text-decoration: none; padding: 0.75rem 1rem; font-size: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: background 0.3s ease, color 0.3s ease; }
+    .sidebar a:hover { background: #20c997; color: #fff; }
+    .sidebar .bottom-links a { background: #34495e; font-weight: 500; }
+    .sidebar .bottom-links a:hover { background: #20c997; }
+    .close-btn { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: #fff; cursor: pointer; transition: color 0.3s ease; }
+    .close-btn:hover { color: #20c997; }
+    .content { max-width: 1200px; margin: 6rem auto 2rem; padding: 0 1rem; min-height: calc(100vh - 8rem); }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; justify-content: center; align-items: center; }
+    .modal-content { background: #fff; padding: 1.5rem; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .modal-content h2 { font-size: 1.5rem; margin-bottom: 1rem; color: #2c3e50; }
+    .modal-content input { width: 100%; padding: 0.75rem; margin: 0.5rem 0; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+    .modal-content button { padding: 0.75rem 1.5rem; margin: 0.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; transition: background 0.3s ease; }
+    .modal-content .save-btn { background: #20c997; color: #fff; }
+    .modal-content .save-btn:hover { background: #1d9b7e; }
+    .modal-content .cancel-btn { background: #7f8c8d; color: #fff; }
+    .modal-content .cancel-btn:hover { background: #6b757c; }
+    .flash-message { padding: 1rem; margin: 1rem 0; border-radius: 6px; text-align: center; }
+    .flash-success { background: #d4edda; color: #155724; }
+    .flash-error { background: #f8d7da; color: #721c24; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-
   <div id="sidebar" class="sidebar">
     <i class="fas fa-times close-btn" onclick="closeSidebar()"></i>
     <div class="sidebar-links">
       <a href="/"><i class="fas fa-home"></i> Home</a>
       <a href="/dashboard"><i class="fas fa-chart-line"></i> Dashboard</a>
-      <a href="/create-card"><i class="fas fa-edit"></i> Create Card</a>
+      <a href="/create-card"><i class="fas fa-plus"></i> Create Card</a>
       <a href="/edit-cards"><i class="fas fa-edit"></i> Edit Cards</a>
       <a href="/socials"><i class="fas fa-share-alt"></i> Socials</a>
       <a href="/ai-post-generator"><i class="fas fa-robot"></i> AI Post Generator</a>
@@ -206,9 +52,13 @@
     <div class="bottom-links">
       <a href="/profile"><i class="fas fa-user-circle"></i> Profile</a>
       <a href="#" onclick="openLocationModal()"><i class="fas fa-map-marker-alt"></i> Location</a>
+      {% if current_user.is_authenticated %}
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      {% else %}
+        <a href="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+      {% endif %}
     </div>
   </div>
-
   <div id="locationModal" class="modal">
     <div class="modal-content">
       <h2>Set Your Location</h2>
@@ -219,7 +69,6 @@
       </div>
     </div>
   </div>
-
   <div class="navbar">
     <div class="nav-icons">
       <i class="fas fa-bars" onclick="toggleSidebar()"></i>
@@ -231,19 +80,18 @@
       <a href="/profile"><i class="fas fa-user-circle"></i></a>
     </div>
   </div>
-
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
   {% block content %}
   {% endblock %}
-
   <script>
-    function toggleSidebar() {
-      document.getElementById("sidebar").classList.toggle("open");
-    }
-
-    function closeSidebar() {
-      document.getElementById("sidebar").classList.remove("open");
-    }
-
+    function toggleSidebar() { document.getElementById("sidebar").classList.toggle("open"); }
+    function closeSidebar() { document.getElementById("sidebar").classList.remove("open"); }
     document.addEventListener("click", function(event) {
       const sidebar = document.getElementById("sidebar");
       const burgerIcon = document.querySelector(".nav-icons .fa-bars");
@@ -251,19 +99,16 @@
         sidebar.classList.remove("open");
       }
     });
-
     function openLocationModal() {
       const modal = document.getElementById("locationModal");
       const savedLocation = localStorage.getItem("userLocation");
       if (savedLocation) document.getElementById("locationInput").value = savedLocation;
       modal.style.display = "flex";
     }
-
     function closeLocationModal() {
       document.getElementById("locationModal").style.display = "none";
       document.getElementById("locationInput").value = "";
     }
-
     function saveLocation() {
       const location = document.getElementById("locationInput").value.trim();
       if (location) {
