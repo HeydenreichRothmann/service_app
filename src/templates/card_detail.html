@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ card.name }}{% endblock %}
+{% block content %}
+  <div class="content">
+    <div class="card-detail-container">
+      {% if card.image %}
+        <img src="{{ '/' + card.image }}" alt="{{ card.name }}" class="card-detail-image">
+      {% endif %}
+      <h1>{{ card.name }}</h1>
+      <p><strong>Description:</strong> {{ card.description }}</p>
+      <p><strong>Location:</strong> {{ card.location }}</p>
+      <p><strong>Posted By:</strong> {{ card.user }}</p>
+      <p><strong>Contact:</strong> {{ card.contact_details }}</p>
+      <p><small>Logged: {{ card.date_logged }}</small></p>
+    </div>
+  </div>
+
+  <style>
+    .card-detail-container {
+      background: #fff;
+      padding: 2rem;
+      max-width: 700px;
+      margin: 2rem auto;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-detail-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .card-detail-container h1 {
+      font-size: 1.8rem;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    .card-detail-container p {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+{% endblock %}

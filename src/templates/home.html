@@ -7,12 +7,12 @@
 
     <div class="card-grid">
       {% for card in cards %}
-        <div class="card-item">
+        <a href="{{ url_for('card_detail', index=loop.index0) }}" class="card-item">
           {% if card.image %}
             <img src="{{ '/' + card.image }}" alt="{{ card.name }}" class="card-thumbnail">
           {% endif %}
           <h3>{{ card.name }}</h3>
-        </div>
+        </a>
       {% endfor %}
     </div>
   </div>
@@ -49,6 +49,9 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
       text-align: center;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
 
     .card-item:hover {
