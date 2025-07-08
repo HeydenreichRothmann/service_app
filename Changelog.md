@@ -1,0 +1,1 @@
+pyinstaller --onefile --add-data "templates:templates" flask_web_server.py
