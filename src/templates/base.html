@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hustle Hub - {% block title %}{% endblock %}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f3f5;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 12px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .nav-left i,
+    .nav-right i {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .nav-title a {
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .nav-title a:hover {
+      color: #20c997;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #343a40;
+      color: #fff;
+      padding: 60px 20px;
+      transition: left 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      padding: 10px 15px;
+      transition: color 0.2s;
+    }
+
+    .sidebar a:hover {
+      color: #20c997;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .sidebar .profile-link, .sidebar .location-link {
+      background-color: #495057;
+      font-weight: bold;
+      padding: 15px;
+    }
+
+    .sidebar .profile-link {
+      border-bottom: 1px solid #6c757d;
+    }
+
+    .sidebar .location-link {
+      border-top: none;
+    }
+
+    .sidebar .profile-link:hover, .sidebar .location-link:hover {
+      background-color: #20c997;
+      color: #fff;
+    }
+
+    .content {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .content h1 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+
+    .content p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-content h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .modal-content button {
+      padding: 8px 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .modal-content .save-btn {
+      background-color: #20c997;
+      color: #fff;
+    }
+
+    .modal-content .cancel-btn {
+      background-color: #6c757d;
+      color: #fff;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+  <div id="sidebar" class="sidebar">
+    <i class="fas fa-times close-btn" onclick="closeSidebar()"></i>
+    <div class="sidebar-links">
+      <a href="/">🏠 Home</a>
+      <a href="/account">👤 Account</a>
+      <a href="/dashboard">📊 Dashboard</a>
+      <a href="/socials">🌐 Socials</a>
+      <a href="/ai-post-generator">🤖 AI Post Generator</a>
+      <a href="/edit-cards">✏️ Edit Cards</a>
+    </div>
+    <div class="sidebar-bottom-links">
+      <a href="/profile" class="profile-link">👤 Profile</a>
+      <a href="#" class="location-link" onclick="openLocationModal()">📍 Location</a>
+    </div>
+  </div>
+
+  <!-- Location Modal -->
+  <div id="locationModal" class="modal">
+    <div class="modal-content">
+      <h2>Set Your Location</h2>
+      <input type="text" id="locationInput" placeholder="Enter your location (e.g., New York, NY)">
+      <div>
+        <button class="save-btn" onclick="saveLocation()">Save</button>
+        <button class="cancel-btn" onclick="closeLocationModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar">
+    <div class="nav-left">
+      <i class="fas fa-bars" onclick="toggleSidebar()"></i>
+    </div>
+    <div class="nav-title">
+      <a href="/">Hustle Hub</a>
+    </div>
+    <div class="nav-right">
+      <a href="/profile"><i class="fas fa-user-circle"></i></a>
+    </div>
+  </div>
+
+  {% block content %}
+  {% endblock %}
+
+  <script>
+    function toggleSidebar() {
+      console.log("Toggling sidebar");
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    function closeSidebar() {
+      console.log("Closing sidebar");
+      document.getElementById("sidebar").classList.remove("open");
+    }
+
+    document.addEventListener("click", function(event) {
+      const sidebar = document.getElementById("sidebar");
+      const burgerIcon = document.querySelector(".nav-left i");
+      if (sidebar.classList.contains("open") && !sidebar.contains(event.target) && !burgerIcon.contains(event.target)) {
+        console.log("Clicked outside, closing sidebar");
+        sidebar.classList.remove("open");
+      }
+    });
+
+    // Modal Functions
+    function openLocationModal() {
+      console.log("Opening location modal");
+      const modal = document.getElementById("locationModal");
+      const savedLocation = localStorage.getItem("userLocation");
+      if (savedLocation) {
+        document.getElementById("locationInput").value = savedLocation;
+      }
+      modal.style.display = "flex";
+    }
+
+    function closeLocationModal() {
+      console.log("Closing location modal");
+      document.getElementById("locationModal").style.display = "none";
+      document.getElementById("locationInput").value = ""; // Clear input
+    }
+
+    function saveLocation() {
+      const location = document.getElementById("locationInput").value.trim();
+      if (location) {
+        localStorage.setItem("userLocation", location);
+        console.log("Location saved:", location);
+        closeLocationModal();
+      } else {
+        alert("Please enter a valid location!");
+      }
+    }
+  </script>
+</body>
+</html>

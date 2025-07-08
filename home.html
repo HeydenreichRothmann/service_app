@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hustle Hub</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f1f3f5;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 12px 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .nav-left i,
+    .nav-right i {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #333; /* Ensure icon visibility */
+    }
+
+    .nav-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    /* Sidebar (burger menu) */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #343a40;
+      color: #fff;
+      padding: 60px 20px;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      margin: 20px 0;
+      transition: color 0.2s;
+    }
+
+    .sidebar a:hover {
+      color: #20c997;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    /* Grid Layout */
+    .grid-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .card-description {
+      font-size: 0.95rem;
+      color: #555;
+    }
+  </style>
+
+  <!-- Font Awesome 6 CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+  <!-- Sidebar Burger Menu -->
+  <div id="sidebar" class="sidebar">
+    <a href="#">👤 Account</a>
+    <a href="#">📊 Dashboard</a>
+    <a href="#">🌐 Socials</a>
+    <a href="#">🤖 AI Post Generator</a>
+  </div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="nav-left">
+      <i class="fas fa-bars" onclick="toggleSidebar()"></i>
+    </div>
+    <div class="nav-title">Hustle Hub</div>
+    <div class="nav-right">
+      <i class="fas fa-user-circle"></i>
+    </div>
+  </div>
+
+  <!-- Service Grid -->
+  <div class="grid-container">
+    <div class="card">
+      <div class="card-title">Hair Braiding</div>
+      <div class="card-description">Get your style done by pros near you.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tutoring</div>
+      <div class="card-description">Maths, Science, Languages & more.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Custom Cakes</div>
+      <div class="card-description">Order handmade cakes for events.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Welding & Repairs</div>
+      <div class="card-description">Fix gates, fences, and metalwork fast.</div>
+    </div>
+  </div>
+
+  <!-- Sidebar Toggle Script -->
+  <script>
+    function toggleSidebar() {
+      console.log("Toggling sidebar"); // Debug to confirm click
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+  </script>
+
+</body>
+</html>

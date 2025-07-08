@@ -1,12 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-    <title>Hustle Hub</title>
-</head>
-<body>
-    <h1>Welcome to Hustle Hub</h1>
-    <p>This is your single-file Flask foundation. 💪</p>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+  <div class="content">
+    <button onclick="window.location.href='/create-card'" style="padding: 12px 24px; background-color: #20c997; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-bottom: 20px;">Create Hustle Card</button>
+    <div class="grid-container">
+      {% for card in cards %}
+        <div class="card">
+          <div class="card-title">{{ card.name }}</div>
+          <div class="card-description">{{ card.description }}</div>
+          <div class="card-location">Location: {{ card.location }}</div>
+          <div class="card-date">Logged: {{ card.date_logged }}</div>
+          <div class="card-contact">Contact: {{ card.contact_details }}</div>
+          {% if card.image %}
+            <img src="{{ url_for('static', filename=card.image) }}" alt="{{ card.name }}" style="max-width: 100%; border-radius: 8px; margin-top: 10px;">
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    <style>
+      .grid-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 0 20px;
+      }
+
+      .card {
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+      }
+
+      .card-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .card-description {
+        font-size: 0.95rem;
+        color: #555;
+        margin-bottom: 8px;
+      }
+
+      .card-location, .card-date, .card-contact {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+    </style>
+  </div>
+{% endblock %}

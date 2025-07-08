@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Edit Cards{% endblock %}
+{% block content %}
+  <div class="content">
+    <h1>Edit Cards</h1>
+    {% if cards %}
+      {% for card in cards %}
+        <div class="card" style="margin-bottom: 20px; text-align: left; padding: 15px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+          <form method="POST" style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <input type="hidden" name="edit_index" value="{{ loop.index0 }}">
+            <div style="flex: 1; min-width: 200px;">
+              <label>Name:</label>
+              <input type="text" name="edit_name_{{ loop.index0 }}" value="{{ card.name }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <label>Description:</label>
+              <textarea name="edit_description_{{ loop.index0 }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; height: 60px;">{{ card.description }}</textarea>
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <label>Location:</label>
+              <input type="text" name="edit_location_{{ loop.index0 }}" value="{{ card.location }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <label>User:</label>
+              <input type="text" name="edit_user_{{ loop.index0 }}" value="{{ card.user }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <div style="flex: 1; min-width: 200px;">
+              <label>Contact:</label>
+              <input type="text" name="edit_contact_{{ loop.index0 }}" value="{{ card.contact_details }}" style="width: 100%; padding: 5px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </div>
+            <button type="submit" style="padding: 8px 16px; background-color: #20c997; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">Save Changes</button>
+            <form method="POST" style="margin-top: 10px;">
+              <input type="hidden" name="remove_index" value="{{ loop.index0 }}">
+              <button type="submit" style="padding: 8px 16px; background-color: #dc3545; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Remove Card</button>
+            </form>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No cards to edit.</p>
+    {% endif %}
+  </div>
+{% endblock %}
