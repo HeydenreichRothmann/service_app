@@ -3,21 +3,50 @@
 
 {% block content %}
   <div class="content">
-    <button onclick="window.location.href='/create-card'" class="action-btn">Create Hustle Card</button>
 
-    <div class="card-grid">
+    <div class="top-bar">
+      <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Search Hustle Cards..." class="search-input">
+      <button onclick="window.location.href='/create-card'" class="action-btn">Create Hustle Card</button>
+    </div>
+
+    <div class="card-grid" id="cardGrid">
       {% for card in cards %}
         <a href="{{ url_for('card_detail', index=loop.index0) }}" class="card-item">
           {% if card.image %}
             <img src="{{ '/' + card.image }}" alt="{{ card.name }}" class="card-thumbnail">
           {% endif %}
-          <h3>{{ card.name }}</h3>
+          <h3 class="card-title">{{ card.name }}</h3>
         </a>
       {% endfor %}
     </div>
   </div>
 
   <style>
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      font-size: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: border 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: #20c997;
+      outline: none;
+    }
+
     .action-btn {
       padding: 0.75rem 1.5rem;
       background: linear-gradient(90deg, #20c997, #27ae60);
@@ -28,6 +57,7 @@
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(32, 201, 151, 0.3);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      white-space: nowrap;
     }
 
     .action-btn:hover {
@@ -39,7 +69,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem;
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
 
     .card-item {
@@ -67,10 +97,23 @@
       margin-bottom: 0.75rem;
     }
 
-    .card-item h3 {
+    .card-title {
       font-size: 1.1rem;
       color: #2c3e50;
       margin: 0;
     }
   </style>
+
+  <script>
+    function filterCards() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toLowerCase();
+      const cards = document.querySelectorAll('.card-item');
+
+      cards.forEach(card => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        card.style.display = title.includes(filter) ? '' : 'none';
+      });
+    }
+  </script>
 {% endblock %}

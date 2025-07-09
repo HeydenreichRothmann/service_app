@@ -1,46 +1,109 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
+
 {% block content %}
-  <div class="content">
-    <h1>Dashboard</h1>
-    <div class="dashboard-grid">
-      <div class="dashboard-card">
-        <h3>Stats Overview</h3>
-        <p>Track your hustle progress and performance.</p>
-      </div>
-      <div class="dashboard-card">
-        <h3>Activity</h3>
-        <p>View recent updates and interactions.</p>
+<div class="container mx-auto px-4 py-8">
+  <!-- Welcome -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-extrabold text-gray-800">Welcome back <span class="inline-block animate-bounce">👋</span></h1>
+    <p class="text-gray-600">Here’s how your hustle is performing today.</p>
+  </div>
+
+  <!-- Stats Overview -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow p-5 hover:shadow-md transition text-center">
+      <p class="text-sm text-gray-500 mb-1">Total Cards</p>
+      <p class="text-3xl font-bold text-blue-600">{{ stats.total_cards }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 hover:shadow-md transition text-center">
+      <p class="text-sm text-gray-500 mb-1">Total Views</p>
+      <p class="text-3xl font-bold text-green-600">{{ stats.total_views }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow p-5 hover:shadow-md transition text-center">
+      <p class="text-sm text-gray-500 mb-1">Cards Today</p>
+      <p class="text-3xl font-bold text-purple-600">{{ stats.cards_today }}</p>
+    </div>
+  </section>
+
+  <!-- Charts Section -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Views Chart -->
+    <div class="bg-white rounded-xl shadow p-5">
+      <h2 class="text-base font-semibold text-gray-700 mb-3">📈 Views (Last 7 Days)</h2>
+      <div class="relative h-48">
+        <canvas id="viewsChart"></canvas>
       </div>
     </div>
-  </div>
-  <style>
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
 
-    .dashboard-card {
-      background: #fff;
-      border-radius: 15px;
-      padding: 1.5rem;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
-    }
+    <!-- Location Chart -->
+    <div class="bg-white rounded-xl shadow p-5">
+      <h2 class="text-base font-semibold text-gray-700 mb-3">📍 Cards by Location</h2>
+      <div class="relative h-48">
+        <canvas id="locationChart"></canvas>
+      </div>
+    </div>
+  </section>
 
-    .dashboard-card:hover {
-      transform: translateY(-5px);
-    }
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const viewsChart = new Chart(document.getElementById('viewsChart'), {
+      type: 'line',
+      data: {
+        labels: {{ chart_data.views_per_day.labels | tojson }},
+        datasets: [{
+          label: 'Views',
+          data: {{ chart_data.views_per_day.data | tojson }},
+          fill: true,
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: 'rgba(59, 130, 246, 1)',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 3
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true },
+          x: { ticks: { maxRotation: 45, minRotation: 0 } }
+        }
+      }
+    });
 
-    .dashboard-card h3 {
-      color: #2c3e50;
-      margin-bottom: 0.5rem;
-    }
-
-    .dashboard-card p {
-      color: #7f8c8d;
-    }
-  </style>
+    const locationChart = new Chart(document.getElementById('locationChart'), {
+      type: 'doughnut',
+      data: {
+        labels: {{ chart_data.cards_by_location.labels | tojson }},
+        datasets: [{
+          label: 'Cards',
+          data: {{ chart_data.cards_by_location.data | tojson }},
+          backgroundColor: [
+            '#6366F1', '#10B981', '#F59E0B', '#EF4444',
+            '#3B82F6', '#8B5CF6', '#14B8A6'
+          ],
+          hoverOffset: 6
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: '#4B5563',
+              boxWidth: 12,
+              font: { size: 12 }
+            }
+          }
+        }
+      }
+    });
+  </script>
+</div>
 {% endblock %}

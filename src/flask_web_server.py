@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from werkzeug.utils import secure_filename
 
@@ -25,7 +25,6 @@ class User(UserMixin):
 def load_user(username):
     if username in users:
         return User(username)
-    return None
 
 def read_cards():
     cards = []
@@ -33,16 +32,17 @@ def read_cards():
         with open('cards.csv', mode='r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
+                row['views'] = int(row.get('views', 0))
                 cards.append(row)
     except FileNotFoundError:
         with open('cards.csv', mode='w', encoding='utf-8', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details'])
+            writer.writerow(['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details', 'views'])
     return cards
 
 def write_card(data):
     with open('cards.csv', mode='a', encoding='utf-8', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details'])
+        writer = csv.DictWriter(file, fieldnames=['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details', 'views'])
         writer.writerow(data)
 
 def update_card(index, data):
@@ -50,7 +50,7 @@ def update_card(index, data):
     if 0 <= index < len(cards):
         cards[index] = data
         with open('cards.csv', mode='w', encoding='utf-8', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details'])
+            writer = csv.DictWriter(file, fieldnames=['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details', 'views'])
             writer.writeheader()
             writer.writerows(cards)
 
@@ -59,7 +59,7 @@ def delete_card(index):
     if 0 <= index < len(cards):
         del cards[index]
         with open('cards.csv', mode='w', encoding='utf-8', newline='') as file:
-            writer = csv.DictWriter(file, fieldnames=['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details'])
+            writer = csv.DictWriter(file, fieldnames=['name', 'description', 'image', 'location', 'date_logged', 'user', 'contact_details', 'views'])
             writer.writeheader()
             writer.writerows(cards)
 
@@ -99,8 +99,56 @@ def profile():
     return render_template('profile.html', user_info=user_info)
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    return render_template('dashboard.html')
+    cards = read_cards()
+    user_cards = [card for card in cards if card['user'] == current_user.id]
+    
+    # Calculate stats
+    total_cards = len(user_cards)
+    total_views = sum(int(card['views']) for card in user_cards)
+    today = datetime.now().date().strftime('%Y-%m-%d')
+    cards_today = sum(1 for card in user_cards if card['date_logged'].startswith(today))
+    
+    # Get recent cards (last 5, sorted by date descending)
+    recent_cards = sorted(user_cards, key=lambda x: x['date_logged'], reverse=True)[:5]
+    for i, card in enumerate(recent_cards):
+        card['index'] = cards.index(card)
+    
+    # Prepare chart data
+    # Views per day (last 7 days)
+    dates = [(datetime.now().date() - timedelta(days=x)).strftime('%Y-%m-%d') for x in range(6, -1, -1)]
+    views_per_day = {date: 0 for date in dates}
+    for card in user_cards:
+        date = card['date_logged'].split(' ')[0]
+        if date in views_per_day:
+            views_per_day[date] += int(card['views'])
+    
+    # Cards by location
+    location_counts = {}
+    for card in user_cards:
+        loc = card['location'] or 'Unknown'
+        location_counts[loc] = location_counts.get(loc, 0) + 1
+    
+    chart_data = {
+        'views_per_day': {
+            'labels': list(views_per_day.keys()),
+            'data': list(views_per_day.values())
+        },
+        'cards_by_location': {
+            'labels': list(location_counts.keys()),
+            'data': list(location_counts.values())
+        }
+    }
+    
+    stats = {
+        'total_cards': total_cards,
+        'total_views': total_views,
+        'cards_today': cards_today
+    }
+    
+    user_name = session.get('user_info', {}).get('name', current_user.id)
+    return render_template('dashboard.html', stats=stats, recent_cards=recent_cards, chart_data=chart_data, user_name=user_name)
 
 @app.route('/socials')
 def socials():
@@ -114,6 +162,8 @@ def ai_post_generator():
 def card_detail(index):
     cards = read_cards()
     if 0 <= index < len(cards):
+        cards[index]['views'] = int(cards[index].get('views', 0)) + 1
+        update_card(index, cards[index])
         return render_template('card_detail.html', card=cards[index])
     else:
         return "Card not found", 404
@@ -165,7 +215,8 @@ def create_card():
             'location': location,
             'date_logged': date_logged,
             'user': user,
-            'contact_details': contact_details
+            'contact_details': contact_details,
+            'views': 0
         }
 
         write_card(new_card)
@@ -192,7 +243,8 @@ def edit_cards():
                     'location': location,
                     'date_logged': cards[index]['date_logged'],
                     'user': cards[index]['user'],
-                    'contact_details': contact_details
+                    'contact_details': contact_details,
+                    'views': cards[index]['views']
                 }
                 update_card(index, updated_card)
         elif 'remove_index' in request.form:

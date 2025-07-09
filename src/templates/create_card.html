@@ -5,7 +5,7 @@
 <div class="card-creator">
   <h1 class="page-title">🚀 Create Your Hustle Card</h1>
   
-  <form action="/create-card" method="POST" enctype="multipart/form-data" class="card-form">
+  <form action="/create-card" method="POST" enctype="multipart/form-data" class="card-form" id="cardForm">
 
     <!-- Image Preview Box -->
     <div class="image-upload-container">
@@ -120,11 +120,13 @@
   }
 </style>
 
+<!-- Google Maps API (Autocomplete) -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDiy2aO_aI9CK2aEVNF_Y55ZgIpkv9U-Vg&libraries=places"></script>
+
 <script>
   function previewImage(event) {
     const preview = document.getElementById('imagePreview');
     const file = event.target.files[0];
-
     if (file) {
       const img = document.createElement('img');
       img.src = URL.createObjectURL(file);
@@ -134,5 +136,63 @@
       preview.textContent = 'No image selected';
     }
   }
+
+  // Initialize Google Autocomplete
+  let autocomplete;
+  function initAutocomplete() {
+    const input = document.getElementById('cardLocation');
+    autocomplete = new google.maps.places.Autocomplete(input, {
+      types: ['(cities)'],
+      fields: ['geometry', 'name']
+    });
+
+    autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        injectLatLng(place.geometry.location.lat(), place.geometry.location.lng());
+      }
+    });
+  }
+
+  function injectLatLng(lat, lng) {
+    const form = document.getElementById('cardForm');
+    let latInput = document.querySelector('input[name="lat"]');
+    let lngInput = document.querySelector('input[name="lng"]');
+
+    if (!latInput) {
+      latInput = document.createElement('input');
+      latInput.type = 'hidden';
+      latInput.name = 'lat';
+      form.appendChild(latInput);
+    }
+    if (!lngInput) {
+      lngInput = document.createElement('input');
+      lngInput.type = 'hidden';
+      lngInput.name = 'lng';
+      form.appendChild(lngInput);
+    }
+
+    latInput.value = lat;
+    lngInput.value = lng;
+  }
+
+  // Fallback: geocode manually if user skips autocomplete
+  document.getElementById('cardForm').addEventListener('submit', async function (e) {
+    const hasLatLng = document.querySelector('input[name="lat"]') && document.querySelector('input[name="lng"]');
+    if (!hasLatLng) {
+      e.preventDefault();
+      const loc = document.getElementById('cardLocation').value;
+      const apiKey = 'AIzaSyDiy2aO_aI9CK2aEVNF_Y55ZgIpkv9U-Vg';
+      const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(loc)}&key=${apiKey}`);
+      const data = await res.json();
+      if (data.status === 'OK') {
+        const coords = data.results[0].geometry.location;
+        injectLatLng(coords.lat, coords.lng);
+      }
+      this.submit();
+    }
+  });
+
+  window.onload = initAutocomplete;
 </script>
 {% endblock %}
